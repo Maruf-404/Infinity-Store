@@ -82,9 +82,6 @@ const getUserProfile = asyncHandler((req, res) => {
 });
 
 const updateUserProfile = asyncHandler(async (req, res) => {
-  //   if (!errors.isEmpty()) {
-  //   return res.status(400).json({ error: errors.array() });
-  // }
   const { _id } = req.user;
   const { name, email, address } = req.body;
 
