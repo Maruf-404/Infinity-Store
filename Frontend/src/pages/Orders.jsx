@@ -40,7 +40,7 @@ const Orders = () => {
   }, []);
 
   return (
-    <div className="border-t pt-16">
+    <div className="border-t pt-16 px-4">
       <div className="text-2xl">
         <Title text1={"My"} text2={"Orders"} />
       </div>

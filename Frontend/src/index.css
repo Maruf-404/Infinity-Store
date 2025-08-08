@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prata&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Outfit:wght@100..900&family=Prata&display=swap');
 @import "tailwindcss";
 .active{
   background-color: #ffebf5;
@@ -11,7 +10,7 @@ a.active hr {
 }
 
 * {
-    font-family: Outfit;
+    font-family: Manrope;
 }
 
 select, input, textarea {
@@ -36,23 +35,37 @@ select, input, textarea {
 
 .loader {
   width: 45px;
-  aspect-ratio: .75;
+  aspect-ratio: 0.75;
   --c: no-repeat linear-gradient(#000 0 0);
   background: 
-    var(--c) 0%   50%,
-    var(--c) 50%  50%,
+    var(--c) 0% 50%,
+    var(--c) 50% 50%,
     var(--c) 100% 50%;
+  background-size: 20% 50%;
   animation: l7 1s infinite linear alternate;
 }
+
 @keyframes l7 {
-  0%  {background-size: 20% 50% ,20% 50% ,20% 50% }
-  20% {background-size: 20% 20% ,20% 50% ,20% 50% }
-  40% {background-size: 20% 100%,20% 20% ,20% 50% }
-  60% {background-size: 20% 50% ,20% 100%,20% 20% }
-  80% {background-size: 20% 50% ,20% 50% ,20% 100%}
-  100%{background-size: 20% 50% ,20% 50% ,20% 50% }
+  0%  { background-size: 20% 50%, 20% 50%, 20% 50% }
+  20% { background-size: 20% 20%, 20% 50%, 20% 50% }
+  40% { background-size: 20% 100%, 20% 20%, 20% 50% }
+  60% { background-size: 20% 50%, 20% 100%, 20% 20% }
+  80% { background-size: 20% 50%, 20% 50%, 20% 100% }
+  100%{ background-size: 20% 50%, 20% 50%, 20% 50% }
 }
 
+/* Responsive sizing */
+@media (max-width: 768px) {
+  .loader {
+    width: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .loader {
+    width: 25px;
+  }
+}
 
 .search {
   border: none !important;

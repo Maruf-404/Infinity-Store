@@ -5,6 +5,7 @@ import { assets } from "../assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
 import axiosInstance from "../config/axios";
 import { toast } from "react-toastify";
+import Loader from "../components/Loader"
 
 const Product = () => {
   const [productData, setProductData] = useState(false);
@@ -134,7 +135,7 @@ const Product = () => {
       <RelatedProducts category={productData.category} subCategory={productData.subCategory} />
     </div>
   ) : (
-    <div className="opacity-0"></div>
+    <Loader/>
   );
 };
 
