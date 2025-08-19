@@ -6,6 +6,20 @@ import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
 
 // user login
+
+const generateAccessAndRefreshToken = async (userId) => {
+  try {
+    const user = await userModel.findById(userId);
+    const accessToken = await user.generateJwt(userId);
+    const refreshToken = await user.generateJwt(userId, true);
+    user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: true });
+    return { accessToken, refreshToken };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const loginUser = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -24,13 +38,65 @@ const loginUser = asyncHandler(async (req, res) => {
       .status(401)
       .json({ success: false, message: "Invalid credentials" });
   }
-
-  const token = await user.generateJwt(user._id);
   delete user._doc.password;
+
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    user._id
+  );
+
   res
     .status(200)
-    .json({ success: true, message: "User login succesfully", user, token });
+    .cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    })
+    .json({
+      success: true,
+      message: "User login succesfully",
+      user,
+      accessToken,
+    });
 });
+
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  const incomingRefreshToken = req.cookies?.refreshToken;
+  if (!incomingRefreshToken) {
+    return res.status(401).json({ success: false, message: "unauthorized" });
+  }
+
+  try {
+    const decoded = jwt.verify(incomingRefreshToken, process.env.JWT_SECRET);
+
+    const user = await userModel.findById(decoded._id);
+    if (!user || incomingRefreshToken !== user.refreshToken) {
+      return res.status(401).json({ success: false, message: "invalid refreshToken" });
+    }
+
+
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id);
+
+    res
+      .status(200)
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      })
+      .json({
+        success: true,
+        message: "accessToken refreshed",
+        accessToken,
+      });
+
+  } catch (error) {
+    console.error("Refresh token error:", error.message);
+    return res.status(401).json({ success: false, message: "invalid or expired refreshToken" });
+  }
+});
+
 
 // user register
 const registerUser = asyncHandler(async (req, res) => {
@@ -40,7 +106,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   const user = await createUser(req.body);
-  const token = await user.generateJwt(user._id); 
+  const token = await user.generateJwt(user._id);
   delete user._doc.password;
   res
     .status(200)
@@ -102,8 +168,7 @@ const updateAvatar = asyncHandler(async (req, res) => {
   // }
   const user = req.user;
   const { _id } = req.user;
-  
-  
+
   const image = req.files.image && req.files.image[0];
 
   if (!image) {
@@ -137,4 +202,5 @@ export {
   getUserProfile,
   updateUserProfile,
   updateAvatar,
+  refreshAccessToken
 };

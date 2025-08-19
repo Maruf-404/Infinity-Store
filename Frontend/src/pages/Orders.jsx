@@ -94,7 +94,7 @@ const Orders = () => {
             </div>
           ))
         ) : (
-          <Loader />
+      <div className="text-center font-medium text-xl">No Orders Yet</div>
         )}
       </div>
     </div>

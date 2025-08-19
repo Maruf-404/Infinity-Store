@@ -18,8 +18,8 @@ const Login = () => {
     });
  
     if (res.data.success) {
-      setToken(res.data.token);
-      localStorage.setItem("token", res.data.token);
+      setToken(res.data.accessToken);
+      localStorage.setItem("accessToken", res.data.accessToken);
       toast.success("User login successfully");
     }
   };
@@ -32,8 +32,8 @@ const Login = () => {
     });
  
     if (res.data.success) {
-      setToken(res.data.token);
-      localStorage.setItem("token", res.data.token);
+      setToken(res.data.accessToken);
+      localStorage.setItem("accessToken", res.data.accessToken);
       toast.success("User login successfully");
     }
      } catch (error) {
@@ -51,8 +51,8 @@ const Login = () => {
     console.log(res.data);
     
     if (res.data.success) {
-      setToken(res.data.token);
-      localStorage.setItem("token", res.data.token);
+      setToken(res.data.accessToken);
+      localStorage.setItem("accessToken", res.data.accessToken);
       toast.success("User signup successfully");
     }
   };

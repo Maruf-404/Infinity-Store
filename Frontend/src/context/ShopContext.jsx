@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../config/axios";
+import Cookie from "js-cookie"
 
 export const ShopContext = createContext();
 
@@ -144,8 +145,8 @@ const ShopContextProvider = ({ children }) => {
   }, [token]);
 
   useEffect(() => {
-    if (!token || localStorage.getItem("token")) {
-      setToken(localStorage.getItem("token"));
+    if (!token || localStorage.getItem("accessToken")) {
+      setToken(localStorage.getItem("accessToken"));
       getCartData();
     }
   }, [token]);

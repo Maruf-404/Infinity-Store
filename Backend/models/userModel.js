@@ -20,8 +20,8 @@ const userSchema = new mongoose.Schema(
       maxlength: [50, "Email must not be 50 characers long"],
     },
     avatar: {
-        url: { type: String, default: "" },
-  public_id: { type: String, default: "" }, 
+      url: { type: String, default: "" },
+      public_id: { type: String, default: "" },
     },
     address: {
       type: Object,
@@ -32,6 +32,7 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+    refreshToken: {type: String}
   },
   { minimize: false }
 );
@@ -43,10 +44,16 @@ userSchema.methods.isPasswordValid = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-userSchema.methods.generateJwt = async function (id) {
-  return jwt.sign({ _id: id }, process.env.JWT_SECRET, {
-    expiresIn: "7d",
-  });
+userSchema.methods.generateJwt = async function (id, refreshToken) {
+  if (refreshToken) {
+    return jwt.sign({ _id: id }, process.env.JWT_SECRET, {
+      expiresIn: "10d",
+    });
+  } else {
+    return jwt.sign({ _id: id }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
+  }
 };
 
 const userModel = mongoose.models.user || mongoose.model("user", userSchema);

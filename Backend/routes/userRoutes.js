@@ -5,7 +5,8 @@ import {
   adminLogin,
   getUserProfile,
   updateUserProfile,
-  updateAvatar
+  updateAvatar,
+  refreshAccessToken
 } from "../controllers/userController.js";
 import { body } from "express-validator";
 import userAuth from "../middleware/userAuth.js";
@@ -33,5 +34,6 @@ userRouter.post("/admin", adminLogin);
 userRouter.get("/profile", userAuth, getUserProfile)
 userRouter.put("/profile", userAuth, updateUserProfile)
 userRouter.post("/avatar", upload.fields([{name: "image", maxCount: 1}]), userAuth, updateAvatar)
+userRouter.post("/refresh-token", refreshAccessToken)
 
 export default userRouter;

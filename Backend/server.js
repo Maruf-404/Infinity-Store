@@ -8,6 +8,7 @@ import userRouter from "./routes/userRoutes.js"
 import productRouter from "./routes/productRoutes.js"
 import cartRouter from "./routes/cart.Route.js"
 import orderRouter from "./routes/order.route.js"
+import cookieParser from "cookie-parser"
 
 const app = express()
 
@@ -15,7 +16,7 @@ const port = process.env.PORT || 4000
 connectDb()
 connectCloudinary()
 
-// app.use(fileUpload());
+app.use(cookieParser());
 app.use(express.json())
 app.use(cors({
     origin: process.env.CORS_ORIGIN === "*" ? "*" : process.env.CORS_ORIGIN.split(","),
