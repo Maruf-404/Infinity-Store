@@ -75,8 +75,8 @@ const LastestCollection = () => {
           className="mySwiper"
         >
           {lastestCollection.map((item, index) => (
-            <SwiperSlide key={index} className="!h-auto pb-8"> 
-              <div className="h-full flex items-center justify-center p-2">
+            <SwiperSlide key={index} className="!h-auto pb-4 pt-4 rounded"> 
+              <div className="h-full flex items-center justify-center ">
                 <ProductItem
                   id={item._id}
                   name={item.name}
