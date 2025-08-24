@@ -20,8 +20,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
-          'carousel': ['react-responsive-carousel'],
-          'ui-libs': ['lucide-react'] 
+          'carousel': ['react-responsive-carousel'], 
         }
       }
     },
