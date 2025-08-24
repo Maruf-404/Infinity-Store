@@ -1,10 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { lazy, useContext, useEffect, useState } from "react";
 import axiosInstance from "../config/axios";
-import Title from "../components/Title";
 import { assets } from "../assets/assets";
 import { ShopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
-import Loader from "../components/Loader";
+
+const Title = lazy(() => import("../components/Title"));
+const Loader = lazy(() => import("../components/Loader"));
 
 const Profile = () => {
   const { getProfile, profileData, setToken, setCartItems } =

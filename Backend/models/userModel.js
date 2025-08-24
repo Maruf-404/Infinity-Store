@@ -51,7 +51,7 @@ userSchema.methods.generateJwt = async function (id, refreshToken) {
     });
   } else {
     return jwt.sign({ _id: id }, process.env.JWT_SECRET, {
-      expiresIn: "15m",
+      expiresIn: "7d",
     });
   }
 };

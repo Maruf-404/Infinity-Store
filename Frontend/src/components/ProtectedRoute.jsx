@@ -1,17 +1,16 @@
-import React, { useContext, useEffect } from 'react'
-import {ShopContext} from "../context/ShopContext"
+import { useContext, useEffect } from "react";
+import { ShopContext } from "../context/ShopContext";
 
-const ProtectedRoute = ({children}) => {
-    const {navigate, token} = useContext(ShopContext)
-    
-    useEffect(() => {
-     if (!token) {
-      navigate("/login")
-     }
-    }, [])
+const ProtectedRoute = ({ children }) => {
+  const { navigate, token } = useContext(ShopContext);
 
-  return children
-}
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, []);
 
-export default ProtectedRoute
+  return children;
+};
 
+export default ProtectedRoute;

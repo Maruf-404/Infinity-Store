@@ -9,6 +9,7 @@ import productRouter from "./routes/productRoutes.js"
 import cartRouter from "./routes/cart.Route.js"
 import orderRouter from "./routes/order.route.js"
 import cookieParser from "cookie-parser"
+import compression from "compression"
 
 const app = express()
 
@@ -16,6 +17,16 @@ const port = process.env.PORT || 4000
 connectDb()
 connectCloudinary()
 
+app.use(compression({
+  level: 6, 
+  threshold: 1024,
+  filter: (req, res) => {
+    if (req.headers['x-no-compression']) {
+      return false;
+    }
+    return compression.filter(req, res);
+  }
+}));
 app.use(cookieParser());
 app.use(express.json())
 app.use(cors({

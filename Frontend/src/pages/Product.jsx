@@ -1,11 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import { lazy, Suspense, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
-import RelatedProducts from "../components/RelatedProducts";
 import axiosInstance from "../config/axios";
 import { toast } from "react-toastify";
-import Loader from "../components/Loader"
+
+const RelatedProducts = lazy(() => import("../components/RelatedProducts"));
+const Loader = lazy(() => import("../components/Loader"));
 
 const Product = () => {
   const [productData, setProductData] = useState(false);
@@ -14,38 +15,32 @@ const Product = () => {
   const { productId } = useParams();
   const { products, currency, addToCart, navigate } = useContext(ShopContext);
 
-
-  const getProduct = async() => {
-
+  const getProduct = async () => {
     try {
       const res = await axiosInstance.get("/product/single", {
-      params: {productId}
-      })
+        params: { productId },
+      });
       if (res.data.success) {
-         setProductData(res.data.singleProduct);
-          setImage(res.data.singleProduct.images[0]);
+        setProductData(res.data.singleProduct);
+        setImage(res.data.singleProduct.images[0]);
       }
-      
     } catch (error) {
       console.log("Error in get single product", error);
-      
     }
   };
 
   const handleBuy = () => {
     if (size.length > 0) {
-        addToCart(productData._id, size)
-            navigate("/place-order")
-    }else {
-      toast.error("Please select the size")
+      addToCart(productData._id, size);
+      navigate("/place-order");
+    } else {
+      toast.error("Please select the size");
     }
-          
-           
-  }
+  };
 
   useEffect(() => {
     getProduct();
-    window.scrollTo(0,0)
+    window.scrollTo(0, 0);
   }, [products, productId]);
 
   return productData ? (
@@ -106,10 +101,20 @@ const Product = () => {
               ))}
             </div>
           </div>
-        <div className="flex gap-2">
-            <button onClick={() => handleBuy()} className="px-8 py-3 text-sm bg-black text-white active:bg-gray-500">Buy Now</button>
-            <button onClick={() => addToCart(productData._id, size) } className="px-8 py-3 text-sm bg-black text-white active:bg-gray-500">Add to Cart</button> 
-        </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => handleBuy()}
+              className="px-8 py-3 text-sm bg-black text-white active:bg-gray-500"
+            >
+              Buy Now
+            </button>
+            <button
+              onClick={() => addToCart(productData._id, size)}
+              className="px-8 py-3 text-sm bg-black text-white active:bg-gray-500"
+            >
+              Add to Cart
+            </button>
+          </div>
           <hr className="mt-8 md:w-3/4" />
           <div className="flex flex-col text-sm text-gray-600 gap-1 mt-4 font-semibold">
             <p>Cash on Delivery</p>
@@ -120,22 +125,44 @@ const Product = () => {
       </div>
       {/* Descriptiopn and review section */}
       <div className="mt-20">
-         <div className="flex">
+        <div className="flex">
           <b className="border px-5 py-3 text-sm">Description</b>
-            <p className="border px-5 py-3 text-sm">Review(122)</p>
-         </div>
-         <div className="flex flex-col gap-4 border px-6 py-6 text-gray-500 text-sm">
-               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto earum dignissimos animi! Sunt repellendus magni, incidunt voluptas quisquam ex, quia rerum sint porro corporis praesentium distinctio. Facere, cumque. Quia, quam!
-               Sequi et sapiente dicta optio voluptate cumque numquam nisi quas id fugiat nihil suscipit ab deleniti voluptas delectus maxime libero vel rerum veritatis, quisquam molestias hic repellat ut minima? Temporibus.
-               Repellat id aliquid numquam cupiditate libero totam, neque dignissimos quae cumque sint sit dolorem. Ratione similique nulla non temporibus molestiae voluptatibus dolor. Alias vitae quam culpa aperiam incidunt, odio temporibus.
-               Consequuntur eligendi sunt et dolore? Libero dolore laboriosam iusto exercitationem nobis accusantium mollitia. Possimus adipisci autem natus. Velit veritatis temporibus ipsam exercitationem pariatur, aperiam est repellat necessitatibus voluptates repellendus. Repellendus?
-               Labore iste vero quisquam porro illo atque fugit dignissimos officiis, hic vitae numquam itaque, exercitationem ullam, enim nesciunt debitis quasi nam dolorum accusamus laboriosam odio ab nihil voluptatem veritatis! Explicabo.</p>
-         </div>
+          <p className="border px-5 py-3 text-sm">Review(122)</p>
+        </div>
+        <div className="flex flex-col gap-4 border px-6 py-6 text-gray-500 text-sm">
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto
+            earum dignissimos animi! Sunt repellendus magni, incidunt voluptas
+            quisquam ex, quia rerum sint porro corporis praesentium distinctio.
+            Facere, cumque. Quia, quam! Sequi et sapiente dicta optio voluptate
+            cumque numquam nisi quas id fugiat nihil suscipit ab deleniti
+            voluptas delectus maxime libero vel rerum veritatis, quisquam
+            molestias hic repellat ut minima? Temporibus. Repellat id aliquid
+            numquam cupiditate libero totam, neque dignissimos quae cumque sint
+            sit dolorem. Ratione similique nulla non temporibus molestiae
+            voluptatibus dolor. Alias vitae quam culpa aperiam incidunt, odio
+            temporibus. Consequuntur eligendi sunt et dolore? Libero dolore
+            laboriosam iusto exercitationem nobis accusantium mollitia. Possimus
+            adipisci autem natus. Velit veritatis temporibus ipsam
+            exercitationem pariatur, aperiam est repellat necessitatibus
+            voluptates repellendus. Repellendus? Labore iste vero quisquam porro
+            illo atque fugit dignissimos officiis, hic vitae numquam itaque,
+            exercitationem ullam, enim nesciunt debitis quasi nam dolorum
+            accusamus laboriosam odio ab nihil voluptatem veritatis! Explicabo.
+          </p>
+        </div>
       </div>
-      <RelatedProducts category={productData.category} subCategory={productData.subCategory} />
+      <Suspense fallback={<Loader />}>
+        <RelatedProducts
+          category={productData.category}
+          subCategory={productData.subCategory}
+        />
+      </Suspense>
     </div>
   ) : (
-    <Loader/>
+    <div className="h-screen">
+      <Loader />
+    </div>
   );
 };
 

@@ -1,21 +1,27 @@
 import { Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
-import Collection from "./pages/Collection";
-import Contact from "./pages/Contact";
-import About from "./pages/About";
-import Product from "./pages/Product";
-import Cart from "./pages/Cart";
-import Login from "./pages/Login";
-import PlaceOrder from "./pages/PlaceOrder";
-import Orders from "./pages/Orders";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import SearchBar from "./components/SearchBar";
+import { lazy, Suspense } from "react";
 import { ToastContainer } from "react-toastify";
-import Verify from "./pages/Verify";
-import Profile from "./pages/Profile";
-import ProtectedRoute from "./components/ProtectedRoute";
-import PageNotFound from "./pages/PageNotFound";
+
+
+const Home = lazy(() => import("./pages/Home"))
+const Collection = lazy(() => import("./pages/Collection"))
+const Contact = lazy(() => import("./pages/Contact"))
+const About = lazy(() => import("./pages/About"))
+const Product = lazy(() => import("./pages/Product"))
+const Cart = lazy(() => import("./pages/Cart"))
+const Login = lazy(() => import("./pages/Login"))
+const PlaceOrder = lazy(() => import("./pages/PlaceOrder"))
+const Orders = lazy(() => import("./pages/Orders"))
+const Navbar = lazy(() => import("./components/Navbar"))
+const Footer = lazy(() => import("./components/Footer"))
+const SearchBar = lazy(() => import("./components/SearchBar"))                                
+const Verify = lazy(() => import("./pages/Verify"))
+const Profile = lazy(() => import("./pages/Profile"))
+const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"))
+const PageNotFound = lazy(() => import("./pages/PageNotFound"))
+const Loader = lazy(() => import("./components/Loader"))
+
+
 
 const App = () => {
   return (
@@ -23,6 +29,7 @@ const App = () => {
       <ToastContainer/>
       <Navbar/>
       <SearchBar/>
+      <Suspense fallback={<div className="h-screen"><Loader/></div> }>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="collection" element={<Collection />} />
@@ -38,6 +45,7 @@ const App = () => {
          <Route path="profile" element={<ProtectedRoute><Profile/></ProtectedRoute> } />  
             <Route path="/*" element={<PageNotFound />} />
       </Routes>
+      </Suspense>
       <Footer/>
     </div>
   )

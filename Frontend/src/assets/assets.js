@@ -18,7 +18,7 @@ import cross_icon from './cross_icon.png'
 import add_icon from "./add_icon.png"
 import order_icon from "./order_icon.png"
 import upload_area from "./upload_area.png"
-import hero_img from "./hero_img.webp"
+import hero_img from "/hero_img.webp"
 import location_icon from "./location_icon.png"
 import address_icon from "./address_icon.webp"
 import order from "./order.png"

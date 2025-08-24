@@ -1,9 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { lazy, useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "../components/Title";
 import { assets } from "../assets/assets";
-import CartTotal from "../components/CartTotal";
-import Loader from "../components/Loader";
+
+const CartTotal = lazy(() => import("../components/CartTotal"))
+const Loader = lazy(() => import("../components/Loader"))
+
 
 const Cart = () => {
   const { products, cartItems, currency, updateQuantity, navigate } =

@@ -1,8 +1,8 @@
-import React, { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useCallback, useRef } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../config/axios";
-import Cookie from "js-cookie"
+
 
 export const ShopContext = createContext();
 
@@ -15,6 +15,10 @@ const ShopContextProvider = ({ children }) => {
   const [token, setToken] = useState("");
   const [profileData, setProfileData] = useState();
   const navigate = useNavigate();
+  
+  
+  const productsLoaded = useRef(false);
+  const profileLoaded = useRef(false);
 
   const addToCart = async (itemId, size) => {
     if (!size) {
@@ -34,10 +38,10 @@ const ShopContextProvider = ({ children }) => {
       cartData[itemId][size] = 1;
     }
     setCartItems(cartData);
+    
     if (token) {
       try {
-        const res = await axiosInstance.post("/cart/add", { itemId, size });
-        res;
+        await axiosInstance.post("/cart/add", { itemId, size });
       } catch (error) {
         console.log("Error in add to cart", error);
       }
@@ -61,21 +65,20 @@ const ShopContextProvider = ({ children }) => {
   };
 
   const updateQuantity = async (itemId, size, quantity) => {
-    if (token) {
-      let cartData = structuredClone(cartItems);
-      cartData[itemId][size] = quantity;
-      setCartItems(cartData);
-      if (token) {
-        try {
-          await axiosInstance.put("/cart/update", {
-            itemId,
-            size,
-            quantity,
-          });
-        } catch (error) {
-          console.log("Error in update cart", error);
-        }
-      }
+    if (!token) return;
+    
+    let cartData = structuredClone(cartItems);
+    cartData[itemId][size] = quantity;
+    setCartItems(cartData);
+    
+    try {
+      await axiosInstance.put("/cart/update", {
+        itemId,
+        size,
+        quantity,
+      });
+    } catch (error) {
+      console.log("Error in update cart", error);
     }
   };
 
@@ -93,30 +96,32 @@ const ShopContextProvider = ({ children }) => {
         }
       }
     }
-
     return totalAmount;
   };
 
-  const getCartData = async () => {
-    if (token) {
-      try {
-        const res = await axiosInstance.get("/cart/get");
-
-        if (res.data.success) {
-          setCartItems(res.data.cartData);
-        }
-      } catch (error) {
-        console.log("Error in get cart data", error);
+  
+  const getCartData = useCallback(async () => {
+    if (!token) return;
+    
+    try {
+      const res = await axiosInstance.get("/cart/get");
+      if (res.data.success) {
+        setCartItems(res.data.cartData);
       }
+    } catch (error) {
+      console.log("Error in get cart data", error);
     }
-  };
+  }, [token]);
 
-  const getAllProducts = async () => {
+
+  const getAllProducts = useCallback(async () => {
+    if (productsLoaded.current) return; // Prevent multiple calls
+    
     try {
       const res = await axiosInstance.get("/product/all");
-
       if (res.data.success) {
         setProducts(res.data.allProduct);
+        productsLoaded.current = true; // Mark as loaded
       } else {
         toast.error(res.data.message);
       }
@@ -124,32 +129,49 @@ const ShopContextProvider = ({ children }) => {
       console.log("Error in get all products", error);
       toast.error(error.message);
     }
-  };
+  }, []);
 
-  const getProfile = async () => {
-    if (token) {
-      try {
-        const response = await axiosInstance.get("/user/profile");
-        if (response.data.success) {
-          setProfileData(response.data.user);
-        }
-      } catch (error) {
-        console.error("Error in get user profile:", error);
+ 
+  const getProfile = useCallback(async () => {
+    if (!token || profileLoaded.current) return;
+    
+    try {
+      const response = await axiosInstance.get("/user/profile");
+      if (response.data.success) {
+        setProfileData(response.data.user);
+        profileLoaded.current = true; // Mark as loaded
       }
+    } catch (error) {
+      console.error("Error in get user profile:", error);
     }
-  };
-
-  useEffect(() => {
-    getAllProducts();
-    getProfile();
   }, [token]);
 
+
   useEffect(() => {
-    if (!token || localStorage.getItem("accessToken")) {
-      setToken(localStorage.getItem("accessToken"));
+    console.log("call");
+    
+    getAllProducts(); 
+  }, []); 
+
+  
+  useEffect(() => {
+    const storedToken = localStorage.getItem("accessToken");
+    if (storedToken && !token) {
+      setToken(storedToken);
+    }
+  }, []); 
+
+
+  useEffect(() => {
+    if (token) {
+      getProfile();
       getCartData();
+    } else {
+     
+      setProfileData(null);
+      profileLoaded.current = false;
     }
-  }, [token]);
+  }, [token, getProfile, getCartData]);
 
   const value = {
     products,

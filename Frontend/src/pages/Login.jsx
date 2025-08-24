@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
@@ -16,7 +16,7 @@ const Login = () => {
       email,
       password,
     });
- 
+
     if (res.data.success) {
       setToken(res.data.accessToken);
       localStorage.setItem("accessToken", res.data.accessToken);
@@ -25,21 +25,20 @@ const Login = () => {
   };
 
   const guestLogin = async () => {
-     try {
-          const res = await axiosInstance.post("/user/login", {
-      email: "guest@gmail.com",
-      password: "guest@dev",
-    });
- 
-    if (res.data.success) {
-      setToken(res.data.accessToken);
-      localStorage.setItem("accessToken", res.data.accessToken);
-      toast.success("User login successfully");
-    }
-     } catch (error) {
+    try {
+      const res = await axiosInstance.post("/user/login", {
+        email: "guest@gmail.com",
+        password: "guest@dev",
+      });
+
+      if (res.data.success) {
+        setToken(res.data.accessToken);
+        localStorage.setItem("accessToken", res.data.accessToken);
+        toast.success("User login successfully");
+      }
+    } catch (error) {
       console.log("Error in guest login", error);
-      
-     }
+    }
   };
 
   const signup = async () => {
@@ -49,7 +48,7 @@ const Login = () => {
       password,
     });
     console.log(res.data);
-    
+
     if (res.data.success) {
       setToken(res.data.accessToken);
       localStorage.setItem("accessToken", res.data.accessToken);
@@ -67,7 +66,7 @@ const Login = () => {
       }
     } catch (error) {
       console.log("Error in user authentication", error);
-      toast.error(error.response.data.error[0].msg)
+      toast.error(error.response.data.error[0].msg);
     }
   };
 
@@ -115,7 +114,9 @@ const Login = () => {
         value={password}
       />
       <div className="flex justify-between w-full mt-[8px]">
-        <p onClick={() => guestLogin()} className="cursor-pointer">Guest Account</p>
+        <p onClick={() => guestLogin()} className="cursor-pointer">
+          Guest Account
+        </p>
         {currentState === "Login" ? (
           <p
             onClick={() => setCurrentState("Sign Up")}

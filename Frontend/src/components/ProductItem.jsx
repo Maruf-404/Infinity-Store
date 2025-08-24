@@ -1,5 +1,3 @@
-// ProductItem.jsx
-import React from "react";
 import { Link } from "react-router-dom";
 
 const ProductItem = ({ id, name, price, images }) => {
@@ -11,6 +9,7 @@ const ProductItem = ({ id, name, price, images }) => {
           <img
             src={images[0]}
             alt={name}
+            loading="lazy"
             className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
           />
         </div>

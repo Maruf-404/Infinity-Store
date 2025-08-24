@@ -71,3 +71,23 @@ select, input, textarea {
   border: none !important;
   box-shadow: none !important;
 }
+
+
+   .carousel .slide img {
+          width: 100% !important;
+          height: 30rem !important;
+          object-fit: cover !important;
+          max-width: 80rem !important;
+          margin: 0 auto !important;
+        }
+        
+        .carousel-root {
+          max-width: 80rem;
+          margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+          .carousel .slide img {
+            height: 20rem !important;
+          }
+        }

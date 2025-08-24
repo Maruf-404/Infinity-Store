@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import { lazy, useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
-import Title from "./Title";
-import ProductItem from "./ProductItem";
+
+const Title = lazy(() => import("../components/Title"));
+const ProductItem = lazy(() => import("./ProductItem"));
 
 const RelatedProducts = ({ category, subCategory }) => {
   const { products } = useContext(ShopContext);

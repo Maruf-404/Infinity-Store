@@ -1,10 +1,13 @@
-import { useContext, useState } from "react";
-import Title from "../components/Title";
-import CartTotal from "../components/CartTotal";
+import { lazy, useContext, useState } from "react";
 import { assets } from "../assets/assets";
 import { ShopContext } from "../context/ShopContext";
 import axiosInstance from "../config/axios";
 import { toast } from "react-toastify";
+
+
+
+const CartTotal = lazy(() => import("../components/CartTotal"))
+const Title = lazy(() => import("../components/Title"))
 
 const PlaceOrder = () => {
   const [method, setMethod] = useState("cod");

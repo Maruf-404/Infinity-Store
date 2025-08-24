@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { lazy, useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
-import Title from "../components/Title";
 import axiosInstance from "../config/axios";
-import Loader from "../components/Loader";
+
+const Title = lazy(() => import("../components/Title"));
 
 const Orders = () => {
   const { currency } = useContext(ShopContext);
@@ -14,7 +14,6 @@ const Orders = () => {
       let allOrdersItem = [];
       res.data.allOrders.forEach((order) => {
         order.items.forEach((item) => {
-          
           if (order.payment === true) {
             allOrdersItem.push({
               price: item.price,
@@ -30,8 +29,6 @@ const Orders = () => {
         });
       });
       setOrders(allOrdersItem.reverse());
-   
-      
     }
   };
 
@@ -94,7 +91,7 @@ const Orders = () => {
             </div>
           ))
         ) : (
-      <div className="text-center font-medium text-xl">No Orders Yet</div>
+          <div className="text-center font-medium text-xl">No Orders Yet</div>
         )}
       </div>
     </div>

@@ -1,7 +1,8 @@
-import React from 'react'
-import Title from "../components/Title"
+import { lazy } from "react"
 import {assets} from "../assets/assets"
 import NewsletterBox from '../components/NewsletterBox'
+
+const Title = lazy(() => import("../components/Title"))
 
 const About = () => {
   return (

@@ -1,9 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import { lazy, useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
-import Title from "../components/Title";
-import ProductItem from "../components/ProductItem";
-import Loader from "../components/Loader";
+
+
+const Loader = lazy(() => import("../components/Loader"))
+const Title = lazy(() => import("../components/Title"))
+const ProductItem = lazy(() => import("../components/ProductItem"))
+
 
 const Collection = () => {
   const { products, search, showSearch } = useContext(ShopContext);
@@ -30,7 +33,7 @@ const Collection = () => {
   };
 
   const applyFilter = () => {
-    let productsCopy = products.reverse();
+    let productsCopy = products.slice();
     if (search) {
       productsCopy = productsCopy.filter((item) =>
         item.name.toLowerCase().includes(search.toLowerCase())

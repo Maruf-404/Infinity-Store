@@ -1,14 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { lazy, useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
-import Title from "./Title";
-import ProductItem from "./ProductItem";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow, Pagination } from "swiper/modules";
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 
-const LastestCollection = () => {
+
+const Title = lazy(() => import("./Title"))
+const ProductItem = lazy(() => import("./ProductItem"))
+
+const LatestCollection = () => {
   const { products } = useContext(ShopContext);
   const [lastestCollection, setLatestCollection] = useState([]);
 
@@ -92,4 +94,4 @@ const LastestCollection = () => {
   );
 };
 
-export default LastestCollection;
+export default LatestCollection;
